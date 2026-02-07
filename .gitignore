@@ -32,3 +32,4 @@ certs/*.key
 # Claude Code
 .claude/
 .worktrees/
+/logs
