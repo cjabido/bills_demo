@@ -31,6 +31,11 @@ services:
       NODE_ENV: production
       PORT: "3000"
       ALLOWED_ORIGIN: "*"
+    healthcheck:
+      test: [ "CMD", "nc", "-z", "localhost", "3000" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   nginx:
     build:
@@ -38,7 +43,8 @@ services:
       dockerfile: nginx/Dockerfile
     restart: unless-stopped
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
 
 volumes:
   pgdata_prod:
