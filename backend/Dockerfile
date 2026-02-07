@@ -16,10 +16,11 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 # ── Production ────────────────────────────────────────────────
 FROM base AS prod
-RUN npm ci --omit=dev
+RUN npm ci
 COPY . .
 RUN npx prisma generate
 RUN npm run build
+RUN npm prune --production
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 EXPOSE 3000
