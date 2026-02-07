@@ -31,7 +31,6 @@ services:
       NODE_ENV: production
       PORT: "3000"
       ALLOWED_ORIGIN: "*"
-      ALLOWED_ORIGIN: "*"
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "3000" ]
       interval: 5s
