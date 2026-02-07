@@ -1,0 +1,47 @@
+# Production compose — compiled backend + nginx serving static frontend
+# Deployed via Dokploy which handles SSL termination (Let's Encrypt)
+# Usage: docker compose -f docker-compose.prod.yml up -d
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: finance
+      POSTGRES_PASSWORD: finance
+      POSTGRES_DB: finance_demo
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finance"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      target: prod
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://finance:finance@postgres:5432/finance_demo
+      NODE_ENV: production
+      PORT: "3000"
+      ALLOWED_ORIGIN: "*"
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+
+volumes:
+  pgdata_prod:

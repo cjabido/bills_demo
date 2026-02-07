@@ -1,0 +1,74 @@
+# Development compose — hot-reload for backend & frontend
+# Usage: docker compose up
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: finance
+      POSTGRES_PASSWORD: finance
+      POSTGRES_DB: finance_demo
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finance"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      target: dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://finance:finance@postgres:5432/finance_demo
+      PORT: "3000"
+      NODE_ENV: development
+      ALLOWED_ORIGIN: "*"
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/prisma:/app/prisma
+      - backend_node_modules:/app/node_modules
+
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_PROXY_TARGET: http://backend:3000
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
+      - ./frontend/vite.config.ts:/app/vite.config.ts
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      - ./frontend/tsconfig.app.json:/app/tsconfig.app.json
+      - ./frontend/tsconfig.node.json:/app/tsconfig.node.json
+      - frontend_node_modules:/app/node_modules
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+      - frontend
+    volumes:
+      - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
+
+volumes:
+  pgdata:
+  backend_node_modules:
+  frontend_node_modules:

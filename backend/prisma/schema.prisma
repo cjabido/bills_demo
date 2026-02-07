@@ -1,0 +1,169 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// -- Enums --
+
+enum AccountType {
+  checking
+  savings
+  credit_card
+  investment
+  loan
+}
+
+enum CategoryType {
+  income
+  expense
+}
+
+enum FrequencyType {
+  monthly
+  semi_monthly
+  weekly
+  biweekly
+  quarterly
+  annual
+}
+
+enum TemplateType {
+  bill
+  investment
+  income
+}
+
+// -- Models --
+
+model Account {
+  id          String      @id @default(uuid()) @db.Uuid
+  name        String
+  type        AccountType
+  institution String
+  lastFour    String      @map("last_four")
+  balance     Decimal     @default(0) @db.Decimal(15, 2)
+  isActive    Boolean     @default(true) @map("is_active")
+  isTaxable   Boolean     @default(true) @map("is_taxable")
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime    @updatedAt @map("updated_at") @db.Timestamptz()
+
+  transactions       Transaction[]
+  recurringTemplates RecurringTemplate[]
+  assetSnapshots     AssetSnapshot[]
+
+  @@map("accounts")
+}
+
+model Category {
+  id        String       @id @default(uuid()) @db.Uuid
+  name      String
+  type      CategoryType
+  color     String
+  icon      String       @default("Tag")
+  isDefault Boolean      @default(false) @map("is_default")
+  sortOrder Int          @default(0) @map("sort_order")
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamptz()
+
+  transactions       Transaction[]
+  recurringTemplates RecurringTemplate[]
+  budgets            Budget[]
+
+  @@map("categories")
+}
+
+model Transaction {
+  id                   String   @id @default(uuid()) @db.Uuid
+  description          String
+  merchant             String
+  amount               Decimal  @db.Decimal(15, 2)
+  date                 DateTime @db.Date
+  accountId            String   @map("account_id") @db.Uuid
+  categoryId           String   @map("category_id") @db.Uuid
+  recurringTemplateId  String?  @map("recurring_template_id") @db.Uuid
+  notes                String?
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt            DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  account            Account            @relation(fields: [accountId], references: [id])
+  category           Category           @relation(fields: [categoryId], references: [id])
+  recurringTemplate  RecurringTemplate? @relation(fields: [recurringTemplateId], references: [id])
+
+  @@index([date])
+  @@index([accountId])
+  @@index([categoryId])
+  @@map("transactions")
+}
+
+model RecurringTemplate {
+  id           String        @id @default(uuid()) @db.Uuid
+  name         String
+  amount       Decimal       @db.Decimal(15, 2)
+  frequency    FrequencyType
+  nextDueDate  DateTime      @map("next_due_date") @db.Date
+  categoryId   String        @map("category_id") @db.Uuid
+  accountId    String        @map("account_id") @db.Uuid
+  templateType TemplateType  @default(bill) @map("template_type")
+  isAutopay    Boolean       @default(false) @map("is_autopay")
+  isActive     Boolean       @default(true) @map("is_active")
+  notes        String?
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamptz()
+
+  category     Category      @relation(fields: [categoryId], references: [id])
+  account      Account       @relation(fields: [accountId], references: [id])
+  transactions Transaction[]
+
+  @@index([nextDueDate])
+  @@map("recurring_templates")
+}
+
+model Period {
+  id                String   @id @default(uuid()) @db.Uuid
+  year              Int
+  month             Int
+  half              Int
+  startingBalance   Decimal  @default(0) @map("starting_balance") @db.Decimal(15, 2)
+  projectedIncome   Decimal  @default(0) @map("projected_income") @db.Decimal(15, 2)
+  projectedExpenses Decimal  @default(0) @map("projected_expenses") @db.Decimal(15, 2)
+  notes             String?
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  budgets Budget[]
+
+  @@unique([year, month, half])
+  @@map("periods")
+}
+
+model Budget {
+  id             String   @id @default(uuid()) @db.Uuid
+  periodId       String   @map("period_id") @db.Uuid
+  categoryId     String   @map("category_id") @db.Uuid
+  budgetedAmount Decimal  @map("budgeted_amount") @db.Decimal(15, 2)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  period   Period   @relation(fields: [periodId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@unique([periodId, categoryId])
+  @@map("budgets")
+}
+
+model AssetSnapshot {
+  id        String   @id @default(uuid()) @db.Uuid
+  accountId String   @map("account_id") @db.Uuid
+  date      DateTime @db.Date
+  balance   Decimal  @db.Decimal(15, 2)
+  costBasis Decimal  @default(0) @map("cost_basis") @db.Decimal(15, 2)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  account Account @relation(fields: [accountId], references: [id])
+
+  @@index([accountId, date])
+  @@map("asset_snapshots")
+}
