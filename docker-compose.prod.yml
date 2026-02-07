@@ -31,11 +31,12 @@ services:
       NODE_ENV: production
       PORT: "3000"
       ALLOWED_ORIGIN: "*"
-    healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "3000" ]
       interval: 5s
       timeout: 3s
       retries: 5
+    networks:
+      - app-network
 
   nginx:
     build:
@@ -45,6 +46,13 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+    networks:
+      - app-network
 
 volumes:
   pgdata_prod:
+
+
+networks:
+  app-network:
+    driver: bridge
