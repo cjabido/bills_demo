@@ -1,7 +1,7 @@
 export interface Account {
   id: string;
   name: string;
-  type: 'checking' | 'savings' | 'credit_card' | 'investment';
+  type: 'checking' | 'savings' | 'credit_card' | 'investment' | 'loan';
   institution: string;
   balance: number;
   lastFour: string;

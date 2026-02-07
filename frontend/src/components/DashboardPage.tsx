@@ -108,7 +108,8 @@ function AccountIcon({ type }: { type: Account['type'] }) {
     savings: { icon: PiggyBank, accent: 'text-accent-mint', bg: 'bg-accent-mint-dim' },
     credit_card: { icon: CreditCard, accent: 'text-accent-rose', bg: 'bg-accent-rose-dim' },
     investment: { icon: Landmark, accent: 'text-accent-violet', bg: 'bg-accent-violet-dim' },
-  }[type];
+    loan: { icon: Landmark, accent: 'text-accent-amber', bg: 'bg-accent-amber-dim' },
+  }[type] ?? { icon: Wallet, accent: 'text-text-muted', bg: 'bg-surface-2' };
   const Icon = config.icon;
   return (
     <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${config.bg}`}>
@@ -292,7 +293,7 @@ export default function DashboardPage({ onNavigate }: DashboardPageProps) {
             {/* Cash Flow Projection */}
             {(() => {
               const checkingAccounts = dashAccounts.filter(a => a.type === 'checking');
-              const totalBillsDue = upcomingBills.reduce((s, b) => s + b.amount, 0);
+              const totalBillsDue = upcomingBills.reduce((s, b) => s + Math.abs(b.amount), 0);
 
               return (
                 <div className="bg-surface-1 border border-border-dim rounded-xl p-4 animate-fade-in-up" style={{ animationDelay: '320ms' }}>
@@ -480,7 +481,7 @@ export default function DashboardPage({ onNavigate }: DashboardPageProps) {
                       </div>
                     </div>
                     <span className="text-sm font-mono font-semibold text-text-primary tabular-nums">
-                      ${bill.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      ${Math.abs(bill.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                     </span>
                   </div>
                 ))}
