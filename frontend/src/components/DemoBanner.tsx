@@ -2,7 +2,7 @@ import { AlertTriangle, Github } from 'lucide-react';
 
 export default function DemoBanner() {
   return (
-    <div className="fixed top-0 left-14 right-0 z-30 bg-accent-amber/10 border-b border-accent-amber/20 px-4 py-1.5 flex items-center justify-center gap-3">
+    <div className="fixed top-0 left-14 right-0 z-30 bg-accent-amber/10 border-b border-accent-amber/20 px-4 py-2 flex flex-wrap items-center justify-center gap-3">
       <AlertTriangle className="w-3.5 h-3.5 text-accent-amber shrink-0" />
       <span className="text-xs font-medium text-accent-amber">
         This is a demo with sample data. All changes reset periodically.

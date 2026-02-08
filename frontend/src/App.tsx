@@ -48,7 +48,7 @@ function App() {
   return (
     <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
       <DemoBanner />
-      <div className="flex min-h-screen pt-8 bg-surface-0">
+      <div className="flex min-h-screen pt-10 bg-surface-0">
       {/* Sidebar nav */}
       <nav className="fixed left-0 top-0 bottom-0 w-14 bg-surface-1 border-r border-border-dim flex flex-col items-center py-4 gap-2 z-40">
         <div className="w-8 h-8 rounded-lg bg-accent-sky/15 flex items-center justify-center mb-4">

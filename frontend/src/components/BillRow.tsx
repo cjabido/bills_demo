@@ -120,16 +120,14 @@ export default function BillRow({ bill, onMarkPaid, onEdit, style }: BillRowProp
               {bill.category}
             </span>
           </div>
+          <div className="flex items-center gap-2 mt-1">
+            <span className={`text-xs ${isPaid ? 'text-text-muted' : 'text-text-secondary'}`}>
+              <Clock className="w-3 h-3 inline mr-1 relative -top-px" />
+              {getDueDateLabel(bill)}
+            </span>
+            <StatusIndicator status={bill.status} dueDate={bill.dueDate} />
+          </div>
         </div>
-      </div>
-
-      {/* Center: Date + Status */}
-      <div className="flex flex-col items-end gap-0.5 shrink-0">
-        <span className={`text-xs ${isPaid ? 'text-text-muted' : 'text-text-secondary'}`}>
-          <Clock className="w-3 h-3 inline mr-1 relative -top-px" />
-          {getDueDateLabel(bill)}
-        </span>
-        <StatusIndicator status={bill.status} dueDate={bill.dueDate} />
       </div>
 
       {/* Right: Amount + Action */}

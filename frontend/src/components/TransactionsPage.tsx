@@ -175,7 +175,7 @@ export default function TransactionsPage() {
   return (
     <div className="min-h-screen bg-surface-0 overflow-x-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-surface-0/80 backdrop-blur-xl border-b border-border-dim">
+      <header className="sticky top-10 z-30 bg-surface-0/80 backdrop-blur-xl border-b border-border-dim">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-3">
@@ -363,13 +363,13 @@ export default function TransactionsPage() {
 
                         {/* Amount */}
                         <div className="shrink-0 flex items-center gap-2">
-                          <span className={`text-sm font-mono font-semibold tabular-nums ${isIncome ? 'text-accent-mint' : 'text-text-primary'}`}>
+                          <span className={`text-xs sm:text-sm font-mono font-semibold tabular-nums ${isIncome ? 'text-accent-mint' : 'text-text-primary'}`}>
                             {isIncome ? '+' : '-'}${Math.abs(tx.amount).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                           </span>
                           {isIncome ? (
-                            <ArrowUpRight className="w-3.5 h-3.5 text-accent-mint" />
+                            <ArrowUpRight className="w-3.5 h-3.5 text-accent-mint hidden sm:block" />
                           ) : (
-                            <ArrowDownRight className="w-3.5 h-3.5 text-text-muted" />
+                            <ArrowDownRight className="w-3.5 h-3.5 text-text-muted hidden sm:block" />
                           )}
                         </div>
                       </button>

@@ -49,7 +49,7 @@ function mapBill(b: ApiBill): Bill {
   return {
     id: b.id,
     name: b.name,
-    amount: Number(b.amount),
+    amount: Math.abs(Number(b.amount)),
     dueDate,
     category: b.category.name,
     categoryColor: b.category.color,

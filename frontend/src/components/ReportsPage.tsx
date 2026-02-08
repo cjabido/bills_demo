@@ -423,7 +423,7 @@ export default function ReportsPage() {
   return (
     <div className="min-h-screen bg-surface-0 overflow-x-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-surface-0/80 backdrop-blur-xl border-b border-border-dim">
+      <header className="sticky top-10 z-30 bg-surface-0/80 backdrop-blur-xl border-b border-border-dim">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-3">
@@ -605,20 +605,20 @@ export default function ReportsPage() {
                 </div>
 
                 <div className="overflow-x-auto">
-                <div className="min-w-[520px]">
+                <div className="min-w-[420px]">
                 {/* Table header */}
-                <div className="grid grid-cols-[1fr_1fr_1fr_1fr_80px] gap-2 px-4 py-2.5 border-b border-border-dim bg-surface-2/40">
+                <div className="grid grid-cols-[1fr_1fr_1fr_1fr] sm:grid-cols-[1fr_1fr_1fr_1fr_80px] gap-2 px-4 py-2.5 border-b border-border-dim bg-surface-2/40">
                   <span className="text-[11px] font-medium text-text-muted uppercase tracking-wider">Month</span>
                   <span className="text-[11px] font-medium text-text-muted uppercase tracking-wider text-right">Income</span>
                   <span className="text-[11px] font-medium text-text-muted uppercase tracking-wider text-right">Expenses</span>
                   <span className="text-[11px] font-medium text-text-muted uppercase tracking-wider text-right">Net</span>
-                  <span className="text-[11px] font-medium text-text-muted uppercase tracking-wider text-right">Savings</span>
+                  <span className="text-[11px] font-medium text-text-muted uppercase tracking-wider text-right hidden sm:block">Savings</span>
                 </div>
 
                 {/* Rows */}
                 <div className="divide-y divide-border-dim">
                   {[...filteredSummaries].reverse().map(m => (
-                    <div key={m.month} className="grid grid-cols-[1fr_1fr_1fr_1fr_80px] gap-2 px-4 py-3 hover:bg-surface-2/30 transition-colors">
+                    <div key={m.month} className="grid grid-cols-[1fr_1fr_1fr_1fr] sm:grid-cols-[1fr_1fr_1fr_1fr_80px] gap-2 px-4 py-3 hover:bg-surface-2/30 transition-colors">
                       <span className="text-sm text-text-primary">{m.label}</span>
                       <span className="text-sm font-mono tabular-nums text-accent-mint text-right">
                         ${fmt(m.income)}
@@ -629,7 +629,7 @@ export default function ReportsPage() {
                       <span className={`text-sm font-mono font-semibold tabular-nums text-right ${m.net >= 0 ? 'text-accent-mint' : 'text-accent-rose'}`}>
                         {m.net >= 0 ? '+' : '-'}${fmt(Math.abs(m.net))}
                       </span>
-                      <span className={`text-sm font-mono tabular-nums text-right ${m.savingsRate >= 30 ? 'text-accent-mint' : m.savingsRate >= 20 ? 'text-text-primary' : 'text-accent-amber'}`}>
+                      <span className={`text-sm font-mono tabular-nums text-right hidden sm:block ${m.savingsRate >= 30 ? 'text-accent-mint' : m.savingsRate >= 20 ? 'text-text-primary' : 'text-accent-amber'}`}>
                         {m.savingsRate.toFixed(1)}%
                       </span>
                     </div>
@@ -637,7 +637,7 @@ export default function ReportsPage() {
                 </div>
 
                 {/* Table footer - totals/averages */}
-                <div className="grid grid-cols-[1fr_1fr_1fr_1fr_80px] gap-2 px-4 py-3 border-t border-border-default bg-surface-2/40">
+                <div className="grid grid-cols-[1fr_1fr_1fr_1fr] sm:grid-cols-[1fr_1fr_1fr_1fr_80px] gap-2 px-4 py-3 border-t border-border-default bg-surface-2/40">
                   <span className="text-xs font-medium text-text-muted uppercase tracking-wider">Average</span>
                   <span className="text-sm font-mono font-semibold tabular-nums text-accent-mint text-right">
                     ${fmt(metrics.avgIncome)}
@@ -648,7 +648,7 @@ export default function ReportsPage() {
                   <span className={`text-sm font-mono font-semibold tabular-nums text-right ${metrics.totalSaved >= 0 ? 'text-accent-mint' : 'text-accent-rose'}`}>
                     +${fmt(metrics.avgIncome - metrics.avgExpenses)}
                   </span>
-                  <span className="text-sm font-mono font-semibold tabular-nums text-accent-sky text-right">
+                  <span className="text-sm font-mono font-semibold tabular-nums text-accent-sky text-right hidden sm:block">
                     {metrics.savingsRate.toFixed(1)}%
                   </span>
                 </div>

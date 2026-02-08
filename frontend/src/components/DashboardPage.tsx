@@ -40,7 +40,7 @@ function MetricCard({ label, value, icon: Icon, accent, accentBg, change, delay 
           <Icon className={`w-3.5 h-3.5 ${accent}`} />
         </div>
       </div>
-      <div className={`text-2xl font-mono font-semibold tabular-nums ${accent}`}>{value}</div>
+      <div className={`text-lg sm:text-2xl font-mono font-semibold tabular-nums truncate ${accent}`}>{value}</div>
       {change && (
         <div className="flex items-center gap-1 mt-1.5">
           {change.positive ? (
@@ -142,7 +142,7 @@ export default function DashboardPage({ onNavigate }: DashboardPageProps) {
   return (
     <div className="min-h-screen bg-surface-0">
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-surface-0/80 backdrop-blur-xl border-b border-border-dim">
+      <header className="sticky top-10 z-30 bg-surface-0/80 backdrop-blur-xl border-b border-border-dim">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-3">
