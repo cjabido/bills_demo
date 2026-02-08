@@ -142,7 +142,7 @@ export default function DashboardPage({ onNavigate }: DashboardPageProps) {
   return (
     <div className="min-h-screen bg-surface-0">
       {/* Header */}
-      <header className="sticky top-10 z-30 bg-surface-0/80 backdrop-blur-xl border-b border-border-dim">
+      <header className="sticky top-0 z-30 bg-surface-0/80 backdrop-blur-xl border-b border-border-dim">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-3">
@@ -476,8 +476,8 @@ export default function DashboardPage({ onNavigate }: DashboardPageProps) {
                       <div className="text-sm font-medium text-text-primary">{bill.name}</div>
                       <div className={`text-xs ${bill.daysUntil <= 2 ? 'text-accent-amber' : 'text-text-muted'}`}>
                         {bill.daysUntil === 0 ? 'Due today' :
-                         bill.daysUntil === 1 ? 'Due tomorrow' :
-                         `Due in ${bill.daysUntil} days`}
+                          bill.daysUntil === 1 ? 'Due tomorrow' :
+                            `Due in ${bill.daysUntil} days`}
                       </div>
                     </div>
                     <span className="text-sm font-mono font-semibold text-text-primary tabular-nums">

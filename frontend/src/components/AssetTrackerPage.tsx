@@ -627,7 +627,7 @@ export default function AssetTrackerPage() {
   return (
     <div className="min-h-screen bg-surface-0 overflow-x-hidden">
       {/* Header */}
-      <header className="sticky top-10 z-30 bg-surface-0/80 backdrop-blur-xl border-b border-border-dim">
+      <header className="sticky top-0 z-30 bg-surface-0/80 backdrop-blur-xl border-b border-border-dim">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-3">
@@ -905,73 +905,73 @@ export default function AssetTrackerPage() {
 
           <div className="bg-surface-1 border border-border-dim rounded-xl overflow-x-auto">
             <div className="min-w-[440px]">
-            {/* Table header */}
-            <div className="grid grid-cols-[1fr_1fr_1fr_80px] sm:grid-cols-[1fr_1fr_1fr_1fr_1fr] gap-2 px-4 py-2.5 border-b border-border-dim bg-surface-2/40">
-              {[
-                { key: 'date' as SortField, label: 'Date', hideMobile: false },
-                { key: 'totalValue' as SortField, label: 'Total Value', hideMobile: false },
-                { key: null, label: 'Retirement', hideMobile: false },
-                { key: null, label: 'Taxable', hideMobile: true },
-                { key: 'change' as SortField, label: 'Change', hideMobile: false },
-              ].map((col, i) => (
-                <button
-                  key={i}
-                  onClick={() => col.key && handleSort(col.key)}
-                  className={`flex items-center gap-1 text-[11px] font-medium text-text-muted uppercase tracking-wider ${col.key ? 'cursor-pointer hover:text-text-secondary' : 'cursor-default'} ${i >= 3 ? 'justify-end' : ''} ${col.hideMobile ? 'hidden sm:flex' : ''}`}
-                >
-                  {col.label}
-                  {col.key && sortField === col.key && (
-                    <ArrowUpDown className="w-3 h-3" />
-                  )}
-                </button>
-              ))}
-            </div>
-
-            {/* Table rows */}
-            <div className="divide-y divide-border-dim">
-              {sortedSnapshots.slice(0, 8).map((snap, i) => {
-                const prevSnap = snapshots[snapshots.indexOf(snap) + 1];
-                const change = prevSnap ? snap.totalValue - prevSnap.totalValue : 0;
-                const changePctVal = prevSnap ? ((change / prevSnap.totalValue) * 100).toFixed(1) : '0.0';
-                const isPositive = change >= 0;
-
-                return (
-                  <div
-                    key={snap.id}
-                    className="grid grid-cols-[1fr_1fr_1fr_80px] sm:grid-cols-[1fr_1fr_1fr_1fr_1fr] gap-2 px-4 py-3 hover:bg-surface-2/30 transition-colors"
+              {/* Table header */}
+              <div className="grid grid-cols-[1fr_1fr_1fr_80px] sm:grid-cols-[1fr_1fr_1fr_1fr_1fr] gap-2 px-4 py-2.5 border-b border-border-dim bg-surface-2/40">
+                {[
+                  { key: 'date' as SortField, label: 'Date', hideMobile: false },
+                  { key: 'totalValue' as SortField, label: 'Total Value', hideMobile: false },
+                  { key: null, label: 'Retirement', hideMobile: false },
+                  { key: null, label: 'Taxable', hideMobile: true },
+                  { key: 'change' as SortField, label: 'Change', hideMobile: false },
+                ].map((col, i) => (
+                  <button
+                    key={i}
+                    onClick={() => col.key && handleSort(col.key)}
+                    className={`flex items-center gap-1 text-[11px] font-medium text-text-muted uppercase tracking-wider ${col.key ? 'cursor-pointer hover:text-text-secondary' : 'cursor-default'} ${i >= 3 ? 'justify-end' : ''} ${col.hideMobile ? 'hidden sm:flex' : ''}`}
                   >
-                    <span className="text-sm text-text-primary">
-                      {format(new Date(snap.date), 'MMM d, yyyy')}
-                    </span>
-                    <span className="text-sm font-mono font-semibold tabular-nums text-text-primary">
-                      ${fmt(snap.totalValue)}
-                    </span>
-                    <span className="text-sm font-mono tabular-nums text-text-secondary">
-                      ${fmt(snap.retirement)}
-                    </span>
-                    <span className="text-sm font-mono tabular-nums text-text-secondary text-right hidden sm:block">
-                      ${fmt(snap.taxable)}
-                    </span>
-                    <div className="flex items-center justify-end gap-1">
-                      {i < sortedSnapshots.length - 1 && prevSnap ? (
-                        <>
-                          {isPositive ? (
-                            <ArrowUpRight className="w-3 h-3 text-accent-mint" />
-                          ) : (
-                            <ArrowDownRight className="w-3 h-3 text-accent-rose" />
-                          )}
-                          <span className={`text-sm font-mono tabular-nums ${isPositive ? 'text-accent-mint' : 'text-accent-rose'}`}>
-                            {isPositive ? '+' : ''}{changePctVal}%
-                          </span>
-                        </>
-                      ) : (
-                        <span className="text-xs text-text-muted">&mdash;</span>
-                      )}
+                    {col.label}
+                    {col.key && sortField === col.key && (
+                      <ArrowUpDown className="w-3 h-3" />
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              {/* Table rows */}
+              <div className="divide-y divide-border-dim">
+                {sortedSnapshots.slice(0, 8).map((snap, i) => {
+                  const prevSnap = snapshots[snapshots.indexOf(snap) + 1];
+                  const change = prevSnap ? snap.totalValue - prevSnap.totalValue : 0;
+                  const changePctVal = prevSnap ? ((change / prevSnap.totalValue) * 100).toFixed(1) : '0.0';
+                  const isPositive = change >= 0;
+
+                  return (
+                    <div
+                      key={snap.id}
+                      className="grid grid-cols-[1fr_1fr_1fr_80px] sm:grid-cols-[1fr_1fr_1fr_1fr_1fr] gap-2 px-4 py-3 hover:bg-surface-2/30 transition-colors"
+                    >
+                      <span className="text-sm text-text-primary">
+                        {format(new Date(snap.date), 'MMM d, yyyy')}
+                      </span>
+                      <span className="text-sm font-mono font-semibold tabular-nums text-text-primary">
+                        ${fmt(snap.totalValue)}
+                      </span>
+                      <span className="text-sm font-mono tabular-nums text-text-secondary">
+                        ${fmt(snap.retirement)}
+                      </span>
+                      <span className="text-sm font-mono tabular-nums text-text-secondary text-right hidden sm:block">
+                        ${fmt(snap.taxable)}
+                      </span>
+                      <div className="flex items-center justify-end gap-1">
+                        {i < sortedSnapshots.length - 1 && prevSnap ? (
+                          <>
+                            {isPositive ? (
+                              <ArrowUpRight className="w-3 h-3 text-accent-mint" />
+                            ) : (
+                              <ArrowDownRight className="w-3 h-3 text-accent-rose" />
+                            )}
+                            <span className={`text-sm font-mono tabular-nums ${isPositive ? 'text-accent-mint' : 'text-accent-rose'}`}>
+                              {isPositive ? '+' : ''}{changePctVal}%
+                            </span>
+                          </>
+                        ) : (
+                          <span className="text-xs text-text-muted">&mdash;</span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
